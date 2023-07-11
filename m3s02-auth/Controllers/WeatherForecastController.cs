@@ -58,7 +58,7 @@ namespace m3s02_auth.Controllers
         }
 
 
-        [HttpPost("Rota")]
+        [HttpPost("Auth")]
         public ActionResult Post()
         {
             if (!ValidateLogin(out var clienteToken))
@@ -66,11 +66,6 @@ namespace m3s02_auth.Controllers
 
             return Ok(clienteToken);
         }
-
-
-
-
-
 
         private bool ValidateLogin()
         {
@@ -83,7 +78,6 @@ namespace m3s02_auth.Controllers
             var requestToken = Request.Headers.FirstOrDefault(x => x.Key == "api-key").Value;
 
              clienteToken = _tokensClientes.FirstOrDefault(x => x.Token == requestToken);
-
 
             return  clienteToken != null ;
         }
