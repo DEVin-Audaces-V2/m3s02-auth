@@ -59,6 +59,7 @@ namespace m3s02_auth
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseMiddleware<AuthTokenMiddleware>();
             app.UseMiddleware<ErrorMiddleware>();
             app.UseMiddleware<BaseMiddleware>();
 
