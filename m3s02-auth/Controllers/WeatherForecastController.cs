@@ -13,7 +13,7 @@ namespace m3s02_auth.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class WeatherForecastController :  BaseController
     {
         private static readonly string[] Summaries = new[]
         {
@@ -22,11 +22,13 @@ namespace m3s02_auth.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        private readonly List<TokenCliente> _tokensClientes;
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IConfiguration configuration)
+        
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, 
+                                        IConfiguration configuration) 
+                                        : base (configuration)
         {
             _logger = logger;
-            _tokens = configuration.GetSection("tokenCliente").Get<List<TokenCliente>>();
+           
         }
 
         [HttpGet]
@@ -63,11 +65,6 @@ namespace m3s02_auth.Controllers
         }
 
       
-        private TokenCliente GetCliente( )
-        {
-            var requestToken = Request.Headers.FirstOrDefault(x => x.Key == "api-key").Value;
-            return  _tokensClientes.FirstOrDefault(x => x.Token == requestToken);
-
-        }
+       
     }
 }
