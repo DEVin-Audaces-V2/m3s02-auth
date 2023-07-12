@@ -1,4 +1,5 @@
-﻿using m3s02_auth.Model;
+﻿using m3s02_auth.Exceptions;
+using m3s02_auth.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -46,6 +47,28 @@ namespace m3s02_auth.Controllers
             })
             .ToArray();
         }
+
+        [HttpGet("Error")]
+        public ActionResult<IEnumerable<WeatherForecast>> GetError()
+        {
+            
+            if (!ValidateLogin())
+                return Unauthorized();
+
+                throw new NotImplementedException("Não encontrado");
+                var rng = new Random();
+                return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+                {
+                    Date = DateTime.Now.AddDays(index),
+                    TemperatureC = rng.Next(-20, 55),
+                    Summary = Summaries[rng.Next(Summaries.Length)]
+                })
+                .ToArray();
+           
+
+        }
+
+
 
 
         [HttpPost]

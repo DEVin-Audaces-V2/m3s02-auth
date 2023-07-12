@@ -1,3 +1,4 @@
+using m3s02_auth.Config;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,7 +35,7 @@ namespace m3s02_auth
                 config.InputFormatters.Add(new XmlDataContractSerializerInputFormatter(config));
             });
 
-
+            
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -44,7 +45,7 @@ namespace m3s02_auth
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -58,6 +59,8 @@ namespace m3s02_auth
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseMiddleware<ErrorMiddleware>();
+            app.UseMiddleware<BaseMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
