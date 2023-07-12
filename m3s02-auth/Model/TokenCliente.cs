@@ -7,5 +7,6 @@ namespace m3s02_auth.Model
         public string Token { get; set; }
         public string NomeCliente { get; set; }
         public int IdCliente { get; set; }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using m3s02_auth.Model;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace m3s02_auth.Config
     public class AuthTokenMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly List<string> _tokens;
+        private readonly List<TokenCliente> _tokens;
         public AuthTokenMiddleware(RequestDelegate next, IConfiguration configuration)
         {
-            _tokens = configuration.GetSection("token").Get<List<string>>();
+            _tokens = configuration.GetSection("tokenCliente").Get<List<TokenCliente>>();
             _next = next;
         }
         public async Task InvokeAsync(HttpContext context)
@@ -30,7 +31,7 @@ namespace m3s02_auth.Config
         {
             var requestToken = context.Request.Headers.FirstOrDefault(x => x.Key == "api-key").Value;
 
-            return _tokens.Contains(requestToken); ;
+            return _tokens.Find(x=>x.Token == requestToken) != null; 
         }
     }
 }

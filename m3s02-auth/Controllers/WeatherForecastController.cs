@@ -22,20 +22,16 @@ namespace m3s02_auth.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        
-
         private readonly List<TokenCliente> _tokensClientes;
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IConfiguration configuration)
         {
             _logger = logger;
-           
+            _tokens = configuration.GetSection("tokenCliente").Get<List<TokenCliente>>();
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<WeatherForecast>> Get()
         {
-            
-
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
@@ -49,32 +45,14 @@ namespace m3s02_auth.Controllers
         [HttpGet("Error")]
         public ActionResult<IEnumerable<WeatherForecast>> GetError()
         {
-           
-
                 throw new NotImplementedException("Não encontrado");
-                var rng = new Random();
-                return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-                {
-                    Date = DateTime.Now.AddDays(index),
-                    TemperatureC = rng.Next(-20, 55),
-                    Summary = Summaries[rng.Next(Summaries.Length)]
-                })
-                .ToArray();
-           
-
         }
-
-
-
 
         [HttpPost]
         public ActionResult Post(WeatherForecast weatherForecast)
         {
-          
-
             return Ok(weatherForecast) ;
         }
-
 
         [HttpPost("Auth")]
         public ActionResult Post()
