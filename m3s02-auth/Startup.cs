@@ -1,4 +1,9 @@
 using m3s02_auth.Config;
+using m3s02_auth.DataBase;
+using m3s02_auth.DataBase.Repositories;
+using m3s02_auth.Interfaces.Repositories;
+using m3s02_auth.Interfaces.Services;
+using m3s02_auth.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -35,6 +40,9 @@ namespace m3s02_auth
                 config.InputFormatters.Add(new XmlDataContractSerializerInputFormatter(config));
             });
 
+            services.AddDbContext<DbContexto>();
+            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            services.AddScoped<IUsuarioService, UsuarioServices>();
             
 
             services.AddControllers();
@@ -59,7 +67,7 @@ namespace m3s02_auth
             app.UseRouting();
 
             app.UseAuthorization();
-            app.UseMiddleware<AuthTokenMiddleware>();
+            //app.UseMiddleware<AuthTokenMiddleware>();
             app.UseMiddleware<ErrorMiddleware>();
             app.UseMiddleware<BaseMiddleware>();
 
