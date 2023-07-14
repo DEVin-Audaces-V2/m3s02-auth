@@ -40,9 +40,11 @@ namespace m3s02_auth
                 config.InputFormatters.Add(new XmlDataContractSerializerInputFormatter(config));
             });
 
-            services.AddDbContext<DbContexto>();
-            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
-            services.AddScoped<IUsuarioService, UsuarioServices>();
+            services.AddDbContext<DbContexto>(ServiceLifetime.Transient);
+            services.AddTransient<IUsuarioRepository, UsuarioRepository>();
+
+            services.AddTransient<IAutenticacaoServices, AutenticacaoServices>();
+            services.AddTransient<IUsuarioService, UsuarioServices>();
             
 
             services.AddControllers();
@@ -68,6 +70,7 @@ namespace m3s02_auth
 
             app.UseAuthorization();
             //app.UseMiddleware<AuthTokenMiddleware>();
+            app.UseMiddleware<AuthBasicMiddleware>();
             app.UseMiddleware<ErrorMiddleware>();
             app.UseMiddleware<BaseMiddleware>();
 
