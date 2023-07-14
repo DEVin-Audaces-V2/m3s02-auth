@@ -3,20 +3,25 @@ using m3s02_auth.DataBase;
 using m3s02_auth.DataBase.Repositories;
 using m3s02_auth.Interfaces.Repositories;
 using m3s02_auth.Interfaces.Services;
+using m3s02_auth.Model;
 using m3s02_auth.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace m3s02_auth
@@ -39,6 +44,27 @@ namespace m3s02_auth
                 config.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
                 config.InputFormatters.Add(new XmlDataContractSerializerInputFormatter(config));
             });
+
+
+            var jwtChave = Configuration.GetSection("jwtTokenChave").Get<string>();
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(jwtChave)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+            
+
+
+
 
             services.AddDbContext<DbContexto>(ServiceLifetime.Transient);
             services.AddTransient<IUsuarioRepository, UsuarioRepository>();
@@ -67,10 +93,10 @@ namespace m3s02_auth
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
             //app.UseMiddleware<AuthTokenMiddleware>();
-            app.UseMiddleware<AuthBasicMiddleware>();
+            //app.UseMiddleware<AuthBasicMiddleware>();
             app.UseMiddleware<ErrorMiddleware>();
             app.UseMiddleware<BaseMiddleware>();
 
