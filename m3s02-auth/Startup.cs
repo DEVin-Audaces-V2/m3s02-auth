@@ -77,7 +77,7 @@ namespace m3s02_auth
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "m3s02_auth", Version = "v1" });
-                
+                //Adição do header de autenticação no Swagger 
                 c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
                 {
                     Description = @"JWT Authorization header using the Bearer scheme. 
