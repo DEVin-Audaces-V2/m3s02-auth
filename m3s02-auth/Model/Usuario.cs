@@ -8,6 +8,7 @@ namespace m3s02_auth.Model
         public string Login { get; set; }
         public string Permissao{ get; set; }
         public string Senha { get; set; }
+        public bool Interno { get; set; }
         public Usuario()
         {
             
@@ -17,6 +18,7 @@ namespace m3s02_auth.Model
             Nome = usuario.Nome;
             Login = usuario.Login;
             Permissao = usuario.Permissao;
+            Interno = usuario.Interno;
         }
         public Usuario(UsuarioDTO usuario) : this((UsuarioGetDTO)usuario)
         {

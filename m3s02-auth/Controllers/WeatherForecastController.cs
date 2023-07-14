@@ -36,6 +36,19 @@ namespace m3s02_auth.Controllers
         [Authorize(Roles = "Aluno,Professor")]
         public ActionResult<IEnumerable<WeatherForecast>> Get()
         {
+            var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+            var interno = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Interno").Value);
+            if (!interno)
+            {
+                return Ok("Usuario Externo");
+            }
+
+            if(nome == "vitor")
+            {
+                return Ok("Usuario Bloqueado");
+            }
+
+
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
