@@ -13,9 +13,8 @@ using System.Threading.Tasks;
 namespace m3s02_auth.Controllers
 {
     [ApiController]
-    [Authorize]
     [Route("[controller]")]
-    public class WeatherForecastController :  BaseController
+    public class WeatherForecastController : BaseController
     {
         private static readonly string[] Summaries = new[]
         {
@@ -24,16 +23,17 @@ namespace m3s02_auth.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, 
-                                        IConfiguration configuration) 
-                                        : base (configuration)
+
+        public WeatherForecastController(ILogger<WeatherForecastController> logger,
+                                        IConfiguration configuration)
+                                        : base(configuration)
         {
             _logger = logger;
-           
+
         }
 
         [HttpGet]
+        [Authorize(Roles = "Aluno,Professor")]
         public ActionResult<IEnumerable<WeatherForecast>> Get()
         {
             var rng = new Random();
@@ -47,18 +47,21 @@ namespace m3s02_auth.Controllers
         }
 
         [HttpGet("Error")]
+        [Authorize(Roles = "Aluno")]
         public ActionResult<IEnumerable<WeatherForecast>> GetError()
         {
-                throw new NotImplementedException("Não encontrado");
+            throw new NotImplementedException("Não encontrado");
         }
 
         [HttpPost]
+        [Authorize(Roles = "Professor")]
         public ActionResult Post(WeatherForecast weatherForecast)
         {
-            return Ok(weatherForecast) ;
+            return Ok(weatherForecast);
         }
 
         [HttpPost("Auth")]
+        [Authorize]
         public ActionResult Post()
         {
             var clienteToken = GetCliente();

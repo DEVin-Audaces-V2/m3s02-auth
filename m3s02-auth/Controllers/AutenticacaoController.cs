@@ -1,5 +1,6 @@
 ﻿using m3s02_auth.DTO;
 using m3s02_auth.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace m3s02_auth.Controllers
@@ -15,6 +16,7 @@ namespace m3s02_auth.Controllers
         }
 
         [HttpPost("logar")]
+        [AllowAnonymous]
         public IActionResult Logar(LoginDTO loginDTO)
         {
             if (!_autenticacaoService.Autenticar(loginDTO)) 

@@ -1,6 +1,7 @@
 ﻿using m3s02_auth.DTO;
 using m3s02_auth.Interfaces.Services;
 using m3s02_auth.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace m3s02_auth.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public ActionResult<UsuarioGetDTO> Post(UsuarioDTO usuario)
         {
             var usuarioDB = _usuarioService.Criar(new Usuario(usuario));
@@ -28,6 +30,7 @@ namespace m3s02_auth.Controllers
             return Created(Request.PathBase, new UsuarioGetDTO(usuarioDB));
         }
         [HttpPut("{login}")]
+        [Authorize(Roles ="Professor")]
         public ActionResult<UsuarioGetDTO> Put(UsuarioDTO usuario, string login)
         {
             usuario.Login = login;
@@ -37,6 +40,7 @@ namespace m3s02_auth.Controllers
             return Ok(new UsuarioGetDTO(usuarioDB));
         }
         [HttpGet]
+        [Authorize(Roles = "Professor,Aluno")]
         public ActionResult<List<UsuarioGetDTO>> Get()
         {
             var usuarios = _usuarioService.Obter();
@@ -45,6 +49,7 @@ namespace m3s02_auth.Controllers
             return Ok(usuarios.Select(x => new UsuarioGetDTO(x)));
         }
         [HttpGet("{login}")]
+        [Authorize(Roles = "Professor,Aluno")]
         public ActionResult<List<UsuarioGetDTO>> Get(string login)
         {
             var usuarios = _usuarioService.ObterPorId(login);
@@ -53,6 +58,7 @@ namespace m3s02_auth.Controllers
             return Ok( new UsuarioGetDTO(usuarios));
         }
         [HttpDelete("{login}")]
+        [Authorize(Roles = "Professor")]
         public ActionResult<List<UsuarioGetDTO>> Deletar(string login)
         {
             _usuarioService.Deletar(login);
