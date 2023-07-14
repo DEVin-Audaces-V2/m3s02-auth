@@ -50,9 +50,9 @@ namespace m3s02_auth.Services
             // Utilização de clains Dinamicamente 
             //var clains = new Dictionary<string, object>
             //       {
-            //        { ClaimTypes.Name, usuario.Login },
-            //          {"Nome", usuario.Nome },
-            //         { "Interno", usuario.Interno.ToString() },
+            //          { ClaimTypes.Name, usuario.Login },
+            //          { "Nome", usuario.Nome },
+            //          { "Interno", usuario.Interno.ToString() },
             //          { ClaimTypes.Role, usuario.Permissao },
             //       };
 
